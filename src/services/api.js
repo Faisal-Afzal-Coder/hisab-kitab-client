@@ -1,16 +1,16 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor: Attach JWT token if present
+// Request interceptor to attach JWT Token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('hisab_token');
+    const token = localStorage.getItem('hk_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -19,15 +19,17 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor: Global error handler
+// Response interceptor for session expiration handling
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      // If unauthorized, clear token only if not on login/register
-      if (!window.location.pathname.includes('/login') && !window.location.pathname.includes('/register')) {
-        localStorage.removeItem('hisab_token');
-        localStorage.removeItem('hisab_user');
+      // Don't auto-redirect if we're already on login/register
+      const isAuthPath = window.location.pathname.includes('/login') || window.location.pathname.includes('/register');
+      if (!isAuthPath) {
+        localStorage.removeItem('hk_token');
+        localStorage.removeItem('hk_user');
+        window.location.href = '/login';
       }
     }
     return Promise.reject(error);
