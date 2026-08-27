@@ -10,7 +10,7 @@ const api = axios.create({
 // Request interceptor to attach JWT Token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('hk_token');
+    const token = localStorage.getItem('hisab_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -27,8 +27,9 @@ api.interceptors.response.use(
       // Don't auto-redirect if we're already on login/register
       const isAuthPath = window.location.pathname.includes('/login') || window.location.pathname.includes('/register');
       if (!isAuthPath) {
-        localStorage.removeItem('hk_token');
-        localStorage.removeItem('hk_user');
+        localStorage.removeItem('hisab_token');
+        localStorage.removeItem('hisab_user');
+        localStorage.removeItem('hisab_business');
         window.location.href = '/login';
       }
     }
