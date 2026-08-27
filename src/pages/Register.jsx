@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserPlus, Building, UserCheck } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
@@ -17,7 +17,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !businessName) {
       setError('Please fill in all required fields');
       return;
     }
@@ -26,17 +26,11 @@ const Register = () => {
     setError('');
 
     try {
-      await register({
-        name,
-        email,
-        phone,
-        businessName: businessName || 'Joint Brothers Trading',
-        password,
-      });
+      await register({ name, email, phone, businessName, password });
       navigate('/');
     } catch (err) {
       setLoading(false);
-      setError(err.response?.data?.message || 'Registration failed');
+      setError(err.response?.data?.message || 'Registration failed. Please try again.');
     }
   };
 
@@ -67,9 +61,9 @@ const Register = () => {
           }}>
             HK
           </div>
-          <h1 style={{ fontSize: '1.6rem', fontWeight: 800 }}>Create Joint Workspace</h1>
+          <h1 style={{ fontSize: '1.6rem', fontWeight: 800 }}>Create Your Workspace</h1>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '0.35rem' }}>
-            Initialize your joint multi-brother Hisab-Kitab business
+            Register your business on Hisab-Kitab
           </p>
         </div>
 
@@ -81,9 +75,10 @@ const Register = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">Managing Brother Name (Brother 1) *</label>
+            <label className="form-label">Your Full Name *</label>
             <input
               type="text"
+              id="register-name"
               className="form-control"
               placeholder="e.g. Ahmed Khan"
               value={name}
@@ -93,11 +88,12 @@ const Register = () => {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Joint Business / Firm Name *</label>
+            <label className="form-label">Business / Firm Name *</label>
             <input
               type="text"
+              id="register-business-name"
               className="form-control"
-              placeholder="e.g. Khan Brothers Joint Trading Co."
+              placeholder="e.g. Khan Trading Co."
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
               required
@@ -109,8 +105,9 @@ const Register = () => {
               <label className="form-label">Email Address *</label>
               <input
                 type="email"
+                id="register-email"
                 className="form-control"
-                placeholder="ahmed@business.com"
+                placeholder="you@business.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -120,6 +117,7 @@ const Register = () => {
               <label className="form-label">Phone / WhatsApp</label>
               <input
                 type="text"
+                id="register-phone"
                 className="form-control"
                 placeholder="0300-1234567"
                 value={phone}
@@ -129,9 +127,10 @@ const Register = () => {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Password *</label>
+            <label className="form-label">Password * (min. 6 characters)</label>
             <input
               type="password"
+              id="register-password"
               className="form-control"
               placeholder="••••••••"
               value={password}
@@ -143,16 +142,17 @@ const Register = () => {
 
           <button
             type="submit"
+            id="register-submit"
             className="btn btn-primary"
             style={{ width: '100%', marginTop: '0.5rem', padding: '0.75rem' }}
             disabled={loading}
           >
-            <UserPlus size={18} /> {loading ? 'Registering Workspace...' : 'Register Joint Workspace'}
+            <UserPlus size={18} /> {loading ? 'Creating Workspace...' : 'Create Workspace'}
           </button>
         </form>
 
         <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-          Already have a joint account?{' '}
+          Already have an account?{' '}
           <Link to="/login" style={{ color: 'var(--primary)', fontWeight: 700, textDecoration: 'none' }}>
             Sign In
           </Link>

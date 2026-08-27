@@ -30,7 +30,6 @@ import Purchases from './pages/Purchases';
 import Inventory from './pages/Inventory';
 import Reports from './pages/Reports';
 import ActivityLog from './pages/ActivityLog';
-import Brothers from './pages/Brothers';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -92,7 +91,6 @@ const ProtectedLayout = () => {
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/activity" element={<ActivityLog />} />
-          <Route path="/brothers" element={<Brothers />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

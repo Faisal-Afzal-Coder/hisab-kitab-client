@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : null;
   });
   const [loading, setLoading] = useState(true);
-  const [brothers, setBrothers] = useState([]);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -25,10 +24,6 @@ export const AuthProvider = ({ children }) => {
           setBusiness(res.data.business);
           localStorage.setItem('hisab_user', JSON.stringify(res.data.user));
           localStorage.setItem('hisab_business', JSON.stringify(res.data.business));
-
-          // Also load brothers list
-          const bRes = await api.get('/auth/brothers');
-          setBrothers(bRes.data.brothers || []);
         } catch (err) {
           console.error('[Auth Error]:', err);
           logout();
@@ -47,13 +42,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('hisab_business', JSON.stringify(res.data.business));
     setUser(res.data.user);
     setBusiness(res.data.business);
-
-    // Refresh brothers
-    try {
-      const bRes = await api.get('/auth/brothers');
-      setBrothers(bRes.data.brothers || []);
-    } catch (e) {}
-
     return res.data;
   };
 
@@ -65,20 +53,6 @@ export const AuthProvider = ({ children }) => {
     setUser(res.data.user);
     setBusiness(res.data.business);
     return res.data;
-  };
-
-  // 1-Click Quick Brother Switcher for collaborative joint business operations!
-  const switchBrother = async (brotherIndex) => {
-    try {
-      const res = await api.post('/auth/switch-brother', { brotherIndex });
-      localStorage.setItem('hisab_token', res.data.token);
-      localStorage.setItem('hisab_user', JSON.stringify(res.data.user));
-      setUser(res.data.user);
-      return res.data;
-    } catch (err) {
-      console.error('Error switching brother:', err);
-      throw err;
-    }
   };
 
   const logout = () => {
@@ -94,12 +68,10 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         business,
-        brothers,
         loading,
         login,
         register,
         logout,
-        switchBrother,
         setBusiness,
       }}
     >

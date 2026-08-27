@@ -14,7 +14,6 @@ import {
   Package,
   FileBarChart,
   History,
-  UserCheck,
   Settings,
   X,
 } from 'lucide-react';
@@ -38,8 +37,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/purchases', label: 'Purchases (Kharidari)', icon: ShoppingCart },
     { to: '/inventory', label: 'Inventory / Stock', icon: Package },
     { to: '/reports', label: 'Financial Reports', icon: FileBarChart },
-    { to: '/activity', label: 'Brother Activity Log', icon: History },
-    { to: '/brothers', label: 'Brother Management', icon: UserCheck },
+    { to: '/activity', label: 'Activity Log', icon: History },
     { to: '/settings', label: 'Business Settings', icon: Settings },
   ];
 
@@ -82,7 +80,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 {business?.name || 'Hisab Kitab'}
               </h2>
               <span style={{ fontSize: '0.7rem', color: 'var(--primary)', fontWeight: 600 }}>
-                Joint Workspace
+                Business Workspace
               </span>
             </div>
           </div>
@@ -98,7 +96,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* Current Active Brother Box */}
+        {/* Logged In User Info Box */}
         <div style={{
           margin: '0.85rem 1rem 0.4rem 1rem',
           padding: '0.65rem 0.85rem',
@@ -119,17 +117,17 @@ const Sidebar = ({ isOpen, onClose }) => {
             alignItems: 'center',
             justifyContent: 'center',
             fontWeight: 700,
-            fontSize: '0.8rem',
+            fontSize: '0.9rem',
             flexShrink: 0,
           }}>
-            B{user?.brotherIndex || 1}
+            {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
           </div>
           <div style={{ overflow: 'hidden', flex: 1 }}>
             <div style={{ fontSize: '0.8rem', fontWeight: 700, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
               {user?.name}
             </div>
             <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
-              {user?.role === 'owner' ? 'Managing Partner (Owner)' : `Partner (Brother ${user?.brotherIndex || 1})`}
+              {user?.role === 'owner' ? 'Owner / Admin' : 'Member'}
             </div>
           </div>
         </div>
